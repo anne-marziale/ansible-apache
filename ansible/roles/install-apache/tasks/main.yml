@@ -1,0 +1,47 @@
+---
+#tasks file for install-apache
+
+- name: Installation apache
+  apt: 
+    name=apache2 
+    state=latest
+
+- name: Modification ports.conf
+  ansible.builtin.template:
+    src: "/home/anne/Documents/dev/ansible-apache/ansible/templates/conf/ports.conf.j2"
+    dest: "/etc/apache2/ports.conf"
+    owner: nini
+    # group: apache
+
+- name: Modification apache2.conf
+  ansible.builtin.template:
+    src: "/home/anne/Documents/dev/ansible-apache/ansible/templates/conf/apache2.conf.j2"
+    dest: "/etc/apache2/apache2.conf"
+    owner: nini
+    # group: apache
+
+- name: Modification site.conf.j2
+  ansible.builtin.template:
+    src: "/home/anne/Documents/dev/ansible-apache/ansible/templates/site/site.conf.j2"
+    dest: "/etc/apache2/sites-available/site1.conf"
+    owner: nini
+    # group: apache
+
+- name: Creation lien symbolique
+  ansible.builtin.file:
+    # remote_src: yes
+    src: "/etc/apache2/sites-available/site1.conf"
+    dest: "/etc/apache2/sites-enabled/site1.conf"
+    # owner: nini
+    state: link
+    # group: apache
+
+- name: Depot d'un template index
+  ansible.builtin.template:
+    src: "/home/anne/Documents/dev/ansible-apache/ansible/templates/www/index.html.j2"
+    dest: "{{ htdocs }}/index.html"
+    owner: nini
+    # group: apache
+  notify: reloadApache 
+
+

@@ -1,0 +1,9 @@
+---
+
+- name: deployment
+  ansible.builtin.files:
+  src: /templates/www/index.html.j2
+  dest: "{{ htdocs }}/index.html"
+  owner: apache2
+  group: apache
+
